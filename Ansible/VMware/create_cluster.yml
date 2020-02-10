@@ -1,0 +1,33 @@
+---
+- hosts: 127.0.0.1
+  vars_prompt:
+    - name: "vcenter_hostname"
+      prompt: "Enter the IP/hostname of your vCenter"
+      private: no
+    - name: "vcenter_username"
+      prompt: "Enter your vCenter username"
+      private: no
+      default: "administrator@vsphere.local"
+    - name: "vcenter_password"
+      prompt: "Enter your vCenter password"
+    - name: "datacenter_name"
+      prompt: "Enter the name for your Datacenter"
+      private: no
+      default: "TEST_DATACENTER"
+    - name: "cluster_name"
+      prompt: "Enter the name for your cluster"
+      private: no
+      default: "TEST_CLUSTER"
+  tasks:
+  - name: Create Cluster
+    vmware_cluster:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      datacenter_name: '{{ datacenter_name }}'
+      cluster_name: '{{ cluster_name }}'
+      enable_ha: yes
+      enable_drs: yes
+      state: present
+      validate_certs: no
+    delegate_to: localhost
