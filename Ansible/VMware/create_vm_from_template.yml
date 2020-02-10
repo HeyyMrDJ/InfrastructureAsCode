@@ -1,0 +1,44 @@
+---
+- hosts: 127.0.0.1
+  vars_prompt:
+    - name: "vcenter_hostname"
+      prompt: "Enter the IP/hostname of your vCenter"
+      private: no
+    - name: "vcenter_username"
+      prompt: "Enter your vCenter username"
+      private: no
+      default: "administrator@vsphere.local"
+    - name: "vcenter_password"
+      prompt: "Enter your vCenter password"
+    - name: "datacenter_name"
+      prompt: "Enter the name for your Datacenter"
+      private: no
+      default: "TEST_DATACENTER"
+
+  tasks:
+  - name: Create a virtual machine from a template
+    vmware_guest:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      validate_certs: no
+      folder: /testvms
+      name: testvm_2
+      datacenter: '{{ datacenter_name }}'
+      state: poweredon
+      template: Ubuntu1804
+      disk:
+      - size_gb: 16
+        type: thin
+        datastore: DS1
+      hardware:
+        memory_mb: 2048
+        num_cpus: 2
+        num_cpu_cores_per_socket: 1
+        scsi: paravirtual
+        boot_firmware: "efi"
+      networks:
+      - name: VM Network
+        wait_for_ip_address: yes
+    delegate_to: localhost
+    register: deploy
