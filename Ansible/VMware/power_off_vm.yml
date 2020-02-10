@@ -1,0 +1,29 @@
+---
+- hosts: 127.0.0.1
+  vars_prompt:
+    - name: "vcenter_hostname"
+      prompt: "Enter the IP/hostname of your vCenter"
+      private: no
+
+    - name: "vcenter_username"
+      prompt: "Enter your vCenter username"
+      private: no
+      default: "administrator@vsphere.local"
+
+    - name: "vcenter_password"
+      prompt: "Enter your vCenter password"
+
+    - name: vm_name
+      prompt: "Enter the name of the VM"
+      private: no
+
+  tasks:
+  - name: Poweroff a Virtual Machine
+    vmware_guest_powerstate:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      validate_certs: no
+      name: "{{ vm_name }}"
+      state: shutdown-guest
+    delegate_to: localhost
