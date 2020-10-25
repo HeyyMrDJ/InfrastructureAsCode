@@ -2,4 +2,10 @@ Vagrant.configure("2") do |config|
   config.vm.box = "generic/ubuntu1804"
   config.vm.network "forwarded_port", guest: 80, host: 8080   #HTTP
   config.vm.network "forwarded_port", guest: 443, host: 8443  #HTTPS
+  config.vm.network "forwarded_port", guest: 9090, host: 9090  #Prometheus
+  config.vm.network "forwarded_port", guest: 3000, host: 3000  #Grafana
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.gui = true
+  end
 end

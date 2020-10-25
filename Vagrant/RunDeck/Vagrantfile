@@ -1,0 +1,6 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "ajxb/rundeck"
+  config.vm.network "forwarded_port", guest: 4440, host: 4440
+  config.vm.network "public_network",
+    use_dhcp_assigned_default_route: true
+end
