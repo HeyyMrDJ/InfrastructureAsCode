@@ -1,0 +1,27 @@
+---
+
+- name: Install KVM and Dependancies
+  hosts: nuc
+  become: true
+  tasks:
+    - name: Show architecture and CPU info
+      debug:
+        msg: |
+          vcpus: {{ ansible_facts.processor_vcpus }}
+      failed_when: ansible_facts['processor_vcpus'] == '0'
+
+    - name: Install KVM and dependancies
+      apt:
+        name: 
+          - qemu
+          - qemu-kvm
+          - libvirt-daemon-system
+          - libvirt-clients
+          - bridge-utils
+        state: present
+
+    - name: Install KVM and dependancies
+      apt:
+        name: libvirt-daemon
+        state: present
+
